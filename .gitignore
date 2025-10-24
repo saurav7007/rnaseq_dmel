@@ -1,0 +1,11 @@
+# data, results and caches
+/data/
+/ref/
+/results/
+/work/
+/.conda/
+/.singularity/
+.nextflow*
+/.nextflow/
+__pycache__/
+/*.sif
