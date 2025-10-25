@@ -12,21 +12,33 @@ process FEATURECOUNTS {
     input:
     tuple val(sample_id),
           val(cond),
+          val(read_type),
           path(bam),
           path(annot_gtf)
 
     output:
     tuple val(sample_id),
           val(cond),
+          val(read_type),
           path("${sample_id}.counts.txt")
 
     script:
     """
-    featureCounts \
-        -p \
-        -T 8 \
-        -a ${annot_gtf} \
-        -o ${sample_id}.counts.txt \
-        ${bam}
+    if [[ "${read_type}" == "PE" ]]; then
+        # Paired-end
+        featureCounts \
+            -p \
+            -T 8 \
+            -a ${annot_gtf} \
+            -o ${sample_id}.counts.txt \
+            ${bam}
+    else
+        # Single-end
+        featureCounts \
+            -T 8 \
+            -a ${annot_gtf} \
+            -o ${sample_id}.counts.txt \
+            ${bam}
+    fi
     """
 }

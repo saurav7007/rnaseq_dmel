@@ -35,17 +35,19 @@ process HISAT2_ALIGN {
     input:
     tuple val(sample_id),
           val(cond),
+          val(read_type),
           path(reads)
     path index_files
 
     output:
     tuple val(sample_id),
           val(cond),
+          val(read_type),
           path("${sample_id}.sam")
 
     script:
     """
-    if [ ${reads.size()} -eq 2 ]; then
+    if [[ "${read_type}" == "PE" ]]; then
         # Paired-end
         hisat2 -x dmel_index \
             -1 ${reads[0]} -2 ${reads[1]} \

@@ -21,16 +21,24 @@ workflow {
     samples_ch = Channel
                     .fromPath(params.samplesheet)
                     .splitCsv(header: true)
-                    .map { row -> 
-                        def reads = [ file(row.read1) ]                   // always add R1          
-                        if( row.read2?.trim() ) reads << file(row.read2)  // add R2 only if present
-                        tuple(row.sample_id, row.condition, reads)
+                    .map { row ->
+                        // Always add R1 and default read_type to single-end 
+                        def reads = [ file(row.read1) ]
+                        def read_type = "SE"
+
+                        // If R2 is present, add it and switch to paired-end      
+                        if( row.read2?.trim() ) {
+                            reads << file(row.read2)
+                            read_type = "PE"
+                        }
+
+                        tuple(row.sample_id, row.condition, read_type, reads)
                     }
 
     // Step 1: QC & Trimming
     trimmed_ch = FASTP_TRIM(samples_ch)
-                    .map { sample_id, cond, fastqs, html, json ->
-                        tuple(sample_id, cond, fastqs)
+                    .map { sample_id, cond, read_type, fastqs, html, json ->
+                        tuple(sample_id, cond, read_type, fastqs)
                     }
 
     // Step 2: Build HISAT2 index
@@ -47,4 +55,5 @@ workflow {
     counts_ch = final_bam_ch
                     .combine(annot_ch)
                     | FEATURECOUNTS
+    
 }

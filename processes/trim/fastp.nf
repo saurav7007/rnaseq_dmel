@@ -1,5 +1,5 @@
 /*
- * RNA-Seq pipeline — Step 1: QC and trimming with fastp
+ * RNA-Seq pipeline: QC and trimming with fastp
  * Input : paired-end FASTQ files
  * Output: trimmed FASTQs + HTML + JSON reports
 */
@@ -12,18 +12,20 @@ process FASTP_TRIM {
    input:
    tuple val(sample_id),
          val(cond),
+         val(read_type),
          path(reads)
 
    output:
    tuple val(sample_id),
          val(cond),
+         val(read_type),
          path("*.trim.fastq.gz"),
          path("*.fastp.html"),
          path("*.fastp.json")
 
     script:
     """
-    if [ ${reads.size()} -eq 2 ]; then
+    if [[ "${read_type}" == "PE" ]]; then
         # Paired-end
         fastp \
             -i ${reads[0]} \
