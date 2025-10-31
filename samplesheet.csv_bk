@@ -1,7 +1,0 @@
-sample_id,condition,read1,read2
-WT_1,WT,data/WT_R1.fastq.gz,
-WT_2,WT,data/WT_2_R1.fastq.gz,data/WT_2_R2.fastq.gz
-WT_3,WT,data/WT_3_R1.fastq.gz,data/WT_3_R2.fastq.gz
-Toll_1,Toll,data/Toll_R1.fastq.gz,data/Toll_R2.fastq.gz
-Toll_2,Toll,data/Toll_2_R1.fastq.gz,data/Toll_2_R2.fastq.gz
-Toll_3,Toll,data/Toll_3_R1.fastq.gz,data/Toll_3_R2.fastq.gz
