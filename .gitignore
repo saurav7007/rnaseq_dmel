@@ -9,3 +9,5 @@
 /.nextflow/
 __pycache__/
 /*.sif
+.RData
+.Rhistory
